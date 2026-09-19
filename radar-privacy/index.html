@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Compliance Radar — Privacy Policy</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #5c5c5c;
+    --rule: #e2e2e2;
+    --accent: #1a4f8a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c;
+      --fg: #e8e8e8;
+      --muted: #a0a4ab;
+      --rule: #2e3238;
+      --accent: #7fb0e8;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 16px 96px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 4px; }
+  h2 {
+    font-size: 1.05rem; margin: 40px 0 10px; padding-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+  .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 8px; }
+  p, li { margin: 0 0 12px; }
+  ul { padding-left: 22px; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.88em; background: rgba(127,127,127,0.14);
+    padding: 1px 5px; border-radius: 4px;
+  }
+  a { color: var(--accent); }
+  .note {
+    border-left: 3px solid var(--accent); padding: 2px 0 2px 14px;
+    color: var(--muted);
+  }
+  footer {
+    margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule);
+    color: var(--muted); font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>Compliance Radar — Privacy Policy</h1>
+  <p class="sub">Last updated: 18 September 2026</p>
+
+  <p>
+    Compliance Radar is a private, internal tool. It is not a consumer
+    product, it has no sign-up, and it is not offered to the public. This
+    page exists to describe exactly what the tool does with Google account
+    data, as required for its Google API access.
+  </p>
+
+  <h2>What the tool is</h2>
+  <p>
+    Compliance Radar monitors public regulatory and enforcement sources,
+    compiles what it finds into a daily summary, and emails that summary to
+    one designated internal recipient. It runs on a single private server
+    operated by its author. There are no user accounts and no public
+    interface.
+  </p>
+
+  <h2>What Google data it accesses</h2>
+  <p>
+    The tool requests exactly one Google OAuth scope:
+  </p>
+  <ul>
+    <li><code>https://www.googleapis.com/auth/gmail.send</code></li>
+  </ul>
+  <p>
+    This scope permits sending mail on behalf of the authorizing account and
+    nothing else. It confers no ability to read, search, list, label, modify
+    or delete messages. The tool does not read the mailbox, does not access
+    contacts, and does not access any other Google service.
+  </p>
+  <p class="note">
+    Authorization is granted by the operator to their own Google account. No
+    third party is ever asked to connect an account.
+  </p>
+
+  <h2>What is sent</h2>
+  <p>
+    A single daily email containing the compiled summary described above. It
+    is sent from the authorizing account to one fixed internal recipient
+    address configured on the server. Recipients are not collected, imported,
+    or derived from any Google data — the address is set by hand in server
+    configuration.
+  </p>
+
+  <h2>What is stored, and where</h2>
+  <ul>
+    <li>
+      An OAuth refresh token, held in a permission-restricted file on the
+      operator's private server. It is used solely to obtain short-lived
+      access tokens for sending.
+    </li>
+    <li>
+      A send log recording, per attempt, the timestamp, recipient, subject
+      and success or failure status. This exists so a delivery outage is
+      detected rather than passing silently. It contains no message bodies.
+    </li>
+  </ul>
+  <p>
+    Neither is transmitted anywhere. There is no analytics, no tracking, and
+    no external database.
+  </p>
+
+  <h2>What is never done</h2>
+  <ul>
+    <li>Google user data is not sold, rented, or shared with anyone.</li>
+    <li>It is not used for advertising or any form of profiling.</li>
+    <li>It is not used to train machine-learning models.</li>
+    <li>It is not transferred to any third-party service or processor.</li>
+    <li>No mailbox content is read, because the granted scope cannot read it.</li>
+  </ul>
+
+  <h2>Retention</h2>
+  <p>
+    The refresh token is retained until it is revoked or replaced. Send-log
+    entries are retained for operational troubleshooting and may be pruned at
+    any time. Because the tool only sends, there is no accumulated store of
+    Google user data to retain.
+  </p>
+
+  <h2>Revoking access</h2>
+  <p>
+    The authorizing account can withdraw access at any time at
+    <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.
+    Revocation takes effect immediately; the tool then stops sending and
+    reports the failure to its operator.
+  </p>
+
+  <h2>Limited Use</h2>
+  <p>
+    Use of information received from Google APIs adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy">Google
+    API Services User Data Policy</a>, including its Limited Use
+    requirements.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about this policy: <a href="mailto:1earth@gmail.com">1earth@gmail.com</a>
+  </p>
+
+  <footer>
+    Compliance Radar is operated privately and is not a publicly available
+    service.
+  </footer>
+
+</main>
+</body>
+</html>

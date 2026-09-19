@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word of the Day</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --faint: #9a9a9a;
+    --rule: #e4e0d8;
+    --accent: #8a5a2b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15161a;
+      --fg: #ece9e4;
+      --muted: #9fa3ab;
+      --faint: #6b7078;
+      --rule: #2b2e35;
+      --accent: #d8a373;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    padding: 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--fg);
+    font: 17px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif;
+  }
+  main { max-width: 560px; width: 100%; }
+  .date {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--faint); margin-bottom: 28px;
+  }
+  .word {
+    font-size: clamp(2.4rem, 11vw, 3.6rem); line-height: 1.05;
+    margin: 0 0 6px; letter-spacing: -0.02em;
+  }
+  .say { color: var(--muted); font-style: italic; margin: 0 0 22px; }
+  .pos {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+  }
+  .def { margin: 0 0 26px; }
+  .note {
+    border-top: 1px solid var(--rule); padding-top: 18px;
+    color: var(--muted); font-size: 0.93rem;
+  }
+  footer {
+    margin-top: 40px; color: var(--faint); font-size: 0.78rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="date" id="date"></div>
+  <h1 class="word" id="word">—</h1>
+  <p class="say" id="say"></p>
+  <p class="pos" id="pos"></p>
+  <p class="def" id="def"></p>
+  <p class="note" id="note"></p>
+  <footer>jstar.tv</footer>
+</main>
+<script>
+// Self-contained: no network, no storage, no tracking. The day's entry is
+// chosen from the list below by date, so every visitor sees the same word
+// and it changes at UTC midnight.
+var WORDS = [
+  {w:"apricity", s:"uh-PRISS-it-ee", p:"noun",
+   d:"The warmth of the sun in winter.",
+   n:"Recorded once, in a 1623 dictionary, and essentially never again — a word that describes something everyone has felt and almost no one has needed to name."},
+  {w:"sillage", s:"see-YAHZH", p:"noun",
+   d:"The trace left hanging in the air behind someone who has passed — scent, or more loosely, impression.",
+   n:"From the French for the wake of a ship."},
+  {w:"hiraeth", s:"HEER-eyeth", p:"noun",
+   d:"A longing for a home you cannot return to, or that was never yours to begin with.",
+   n:"Welsh. Usually called untranslatable, which is itself a kind of translation."},
+  {w:"velleity", s:"vuh-LEE-it-ee", p:"noun",
+   d:"A wish too faint to produce any action.",
+   n:"The lowest rung of volition — wanting something exactly as much as it takes to not do it."},
+  {w:"eucatastrophe", s:"yoo-kuh-TAS-truh-fee", p:"noun",
+   d:"A sudden turn of events at the end of a story that ensures it does not end badly.",
+   n:"Coined by Tolkien, who argued the consoling turn was the highest function of a fairy tale."},
+  {w:"anagnorisis", s:"an-ag-NOR-uh-sis", p:"noun",
+   d:"The moment a character passes from ignorance to knowledge — the recognition scene.",
+   n:"Aristotle's term. He thought the best kind arrives together with the reversal of fortune it explains."},
+  {w:"kintsugi", s:"kin-TSOO-ghee", p:"noun",
+   d:"The art of repairing broken pottery with gold, making the fracture part of the object's history rather than hiding it.",
+   n:"Japanese: 'golden joinery'. The repaired bowl is held to be worth more than the unbroken one."},
+  {w:"limerence", s:"LIM-er-ence", p:"noun",
+   d:"The involuntary, intrusive state of infatuation — distinct from love, and largely uninterested in whether it is returned.",
+   n:"Coined by psychologist Dorothy Tennov in the 1970s because the existing vocabulary kept confusing it with something else."},
+  {w:"sprezzatura", s:"spret-tsa-TOO-ra", p:"noun",
+   d:"Studied carelessness; the art of making something difficult look effortless.",
+   n:"From Castiglione's 1528 book of manners, which advised concealing all art so that whatever is done seems done without effort."},
+  {w:"meliorism", s:"MEE-lee-uh-riz-um", p:"noun",
+   d:"The belief that the world tends to get better, and that human effort is what makes it do so.",
+   n:"The position between optimism and pessimism that actually requires something of you."},
+  {w:"solander", s:"so-LAN-der", p:"noun",
+   d:"A protective box made in the form of a book, for holding maps, prints or plates.",
+   n:"Named for Daniel Solander, the botanist who sailed with Cook and needed somewhere to put the specimens."},
+  {w:"petrichor", s:"PET-rih-kor", p:"noun",
+   d:"The smell of rain falling on dry earth.",
+   n:"Coined in 1964 by two Australian researchers: Greek petra, stone, and ichor, the fluid said to run in the veins of the gods."},
+  {w:"quotidian", s:"kwo-TID-ee-un", p:"adjective",
+   d:"Daily; belonging to the ordinary run of things.",
+   n:"Carries a faint double edge — the everyday, and the merely everyday."},
+  {w:"nemophilist", s:"nem-OFF-il-ist", p:"noun",
+   d:"One who is fond of forests; a haunter of woods.",
+   n:"A nineteenth-century coinage that never quite caught on, which seems apt for the habit it describes."},
+  {w:"ultracrepidarian", s:"ul-truh-krep-ih-DAIR-ee-un", p:"noun",
+   d:"A person who offers opinions beyond their competence.",
+   n:"From a painter's rebuke to a cobbler who criticised more than the sandal: 'let the shoemaker go no further.'"},
+  {w:"saudade", s:"sow-DAH-duh", p:"noun",
+   d:"A dense, warm melancholy for something absent — which may never return, or may never have existed.",
+   n:"Portuguese. Said to be the defining mood of fado, and of a certain reading of Portuguese history."},
+  {w:"gloaming", s:"GLOH-ming", p:"noun",
+   d:"Twilight; dusk.",
+   n:"Old English glōm, related to 'glow'. Survived chiefly in Scots before the Romantics collected it."},
+  {w:"agathism", s:"AG-uh-thiz-um", p:"noun",
+   d:"The doctrine that things tend toward good in the end, though the route may be neither direct nor pleasant.",
+   n:"Distinct from optimism, which makes a claim about the route as well."},
+  {w:"palimpsest", s:"PAL-imp-sest", p:"noun",
+   d:"A manuscript scraped clean and written over, with traces of the earlier text still showing.",
+   n:"Parchment was expensive. Some of the best-preserved classical texts survive only as the ghost under something later."},
+  {w:"susurrus", s:"soo-SUR-us", p:"noun",
+   d:"A whispering or rustling sound.",
+   n:"Latin, and onomatopoeic in any language that borrowed it."},
+  {w:"fernweh", s:"FERN-vay", p:"noun",
+   d:"An ache for distant places; the far-cure. The opposite of homesickness.",
+   n:"German. Built as the exact mirror of Heimweh, homesickness, which suggests someone thought the symmetry was needed."},
+  {w:"deliquesce", s:"del-ih-KWESS", p:"verb",
+   d:"To dissolve gradually by absorbing moisture from the air.",
+   n:"Used of certain salts, and of fungi that turn themselves to ink to spread their spores."},
+  {w:"tenebrous", s:"TEN-uh-brus", p:"adjective",
+   d:"Dark, shadowy, obscure.",
+   n:"Shares a root with Tenebrae, the service where the candles are put out one at a time."},
+  {w:"gossamer", s:"GOSS-uh-mer", p:"noun",
+   d:"Fine filmy spider threads drifting in still autumn air; by extension, anything delicate enough to be nearly nothing.",
+   n:"Probably 'goose summer' — the warm spell when the threads appear and geese were eaten."},
+  {w:"halcyon", s:"HAL-see-un", p:"adjective",
+   d:"Calm and peaceful; idyllic, usually in retrospect.",
+   n:"From a bird said to nest on the winter sea, which stayed flat for the fourteen days it took to raise the young."},
+  {w:"opsimath", s:"OP-sih-math", p:"noun",
+   d:"One who begins to learn late in life.",
+   n:"Greek opse, late, and manthanein, to learn. Used disparagingly for most of its history, which says more about the users."},
+  {w:"scintilla", s:"sin-TILL-uh", p:"noun",
+   d:"A trace so small it is offered mainly to be denied — not a scintilla of evidence.",
+   n:"Latin for spark. It survives almost entirely inside that one negative construction."},
+  {w:"cynosure", s:"SY-nuh-shoor", p:"noun",
+   d:"Something that strongly attracts attention; a centre of interest.",
+   n:"Greek for 'dog's tail' — the constellation containing the pole star, by which everything else was navigated."},
+  {w:"redolent", s:"RED-uh-lent", p:"adjective",
+   d:"Strongly reminiscent or suggestive of; fragrant.",
+   n:"Both senses stay live, so it can carry a smell and a memory in the same sentence."},
+  {w:"aubade", s:"oh-BAHD", p:"noun",
+   d:"A poem or song greeting the dawn, typically about lovers parting at daybreak.",
+   n:"The morning counterpart to the serenade. Larkin's is about neither love nor dawn, exactly."}
+];
+var now = new Date();
+var days = Math.floor(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(),
+                               now.getUTCDate()) / 86400000);
+var e = WORDS[((days % WORDS.length) + WORDS.length) % WORDS.length];
+document.getElementById("date").textContent =
+  now.toLocaleDateString(undefined, {weekday:"long", year:"numeric",
+                                     month:"long", day:"numeric"});
+document.getElementById("word").textContent = e.w;
+document.getElementById("say").textContent = "/ " + e.s + " /";
+document.getElementById("pos").textContent = e.p;
+document.getElementById("def").textContent = e.d;
+document.getElementById("note").textContent = e.n;
+document.title = e.w + " — Word of the Day";
+</script>
+</body>
+</html>
